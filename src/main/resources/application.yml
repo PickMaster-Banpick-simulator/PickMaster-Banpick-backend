@@ -1,0 +1,36 @@
+server:
+  port: 8000
+
+spring:
+  application:
+    name: fearless-draft
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/fearless?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
+    username: fearless
+    password: qwer1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update  # ?? ??? update / ?? ??? validate ?? none ??
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQL8Dialect
+
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
+
+  websocket:
+    message-size-limit: 128000
+    send-time-limit: 20s
+
+# ??
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.hibernate.type: trace
+
