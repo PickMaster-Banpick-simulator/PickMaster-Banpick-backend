@@ -30,4 +30,9 @@ public class Team {
 
     @OneToMany(mappedBy = "teamB")
     private List<Match> matchesAsTeamB = new ArrayList<>();
+
+    public void updateTeam(String teamName, String teamLogo) {
+        this.teamName = teamName;
+        this.teamLogo = teamLogo;
+    }
 }
