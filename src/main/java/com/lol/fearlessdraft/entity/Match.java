@@ -1,10 +1,7 @@
 package com.lol.fearlessdraft.entity;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +10,7 @@ import java.util.List;
 @Getter
 @Table(name = "match_tbl")
 @AllArgsConstructor
+@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Match {
 
@@ -38,7 +36,20 @@ public class Match {
     @JoinColumn(name = "team_b_id")
     private Team teamB;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "ban_rule", nullable = false)
+    private BanRule banRule;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "match_type", nullable = false)
+    private MatchType matchType;
+
+
     @OneToMany(mappedBy = "match", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Game> games = new ArrayList<>();
+
+
+    @Column(name = "allow_spectators")
+    private boolean allowSpectators;
 
 }

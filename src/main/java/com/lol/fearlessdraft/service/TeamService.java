@@ -22,6 +22,7 @@ public class TeamService {
     public List<Team> getAllTeams() {
         return teamRepository.findAll();
     }
+
     @Transactional
    public TeamResponseDto createTeam(TeamRequestDto teamRequestDto) {
             Team team  =  Team.builder().
@@ -32,6 +33,7 @@ public class TeamService {
 
             return  new TeamResponseDto(saved.getId(), saved.getTeamName(), saved.getTeamLogo());
    }
+
   @Transactional
    public TeamResponseDto updateTeam(TeamRequestDto teamRequestDto) {
       Team team = teamRepository.findByName(teamRequestDto.teamName()).orElseThrow(()->
