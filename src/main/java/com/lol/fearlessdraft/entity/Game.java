@@ -32,4 +32,16 @@ public class Game {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "red_team_id")
     private Team redTeam;
+
+  @Enumerated(EnumType.STRING)
+  private GamePhase gamePhase;
+
+  @Column(nullable = false)
+  private Integer blueTeamWinCount = 0;
+
+  @Column(nullable = false)
+  private Integer redTeamWinCount = 0;
+
+  // 이번 게임 결과 (true: blue win, false: red win, null: 아직 안끝남)
+  private Boolean blueTeamWin;
 }

@@ -1,11 +1,17 @@
 package com.lol.fearlessdraft.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
 @Table(name = "pick_ban_tbl")
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class PickBan {
 
     @Id
