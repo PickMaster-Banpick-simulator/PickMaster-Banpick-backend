@@ -14,8 +14,27 @@ import org.springframework.security.web.SecurityFilterChain;
 
 
 @Configuration
-
+@EnableMethodSecurity
+@EnableWebSecurity
 public class SecurityConfig {
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+       http.csrf( csrf -> csrf.disable());
+       http.cors(Customizer.withDefaults());
+       http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS) );
+       http.authorizeHttpRequests( authorize -> authorize.anyRequest().authenticated() );
+        http.authorizeHttpRequests( auth->{
+            auth
+                    .requestMatchers("/**/").permitAll()
+                    .anyRequest().authenticated();
+        });
+
+
+        return http.build();
+
+    }
+
 
 
     @Bean

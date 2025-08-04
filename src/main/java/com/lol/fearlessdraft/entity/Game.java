@@ -44,4 +44,15 @@ public class Game {
 
   // 이번 게임 결과 (true: blue win, false: red win, null: 아직 안끝남)
   private Boolean blueTeamWin;
+
+
+
+  public boolean isFinished() {
+    return blueTeamWin != null;
+  }
+
+  public Team getWinner() {
+    if (blueTeamWin == null) return null;
+    return blueTeamWin ? blueTeam : redTeam;
+  }
 }

@@ -52,4 +52,22 @@ public class Match {
     @Column(name = "allow_spectators")
     private boolean allowSpectators;
 
+
+    public boolean isMatchOver() {
+        long teamAWins = games.stream().filter(g -> g.getWinner() != null && g.getWinner().equals(teamA)).count();
+        long teamBWins = games.stream().filter(g -> g.getWinner() != null && g.getWinner().equals(teamB)).count();
+
+        if (matchType == MatchType.BO3) return teamAWins == 2 || teamBWins == 2;
+        else if (matchType == MatchType.BO5) return teamAWins == 3 || teamBWins == 3;
+        return false;
+    }
+
+    public Team getWinner() {
+        long teamAWins = games.stream().filter(g -> g.getWinner() != null && g.getWinner().equals(teamA)).count();
+        long teamBWins = games.stream().filter(g -> g.getWinner() != null && g.getWinner().equals(teamB)).count();
+
+        if (teamAWins > teamBWins) return teamA;
+        else if (teamBWins > teamAWins) return teamB;
+        else return null;
+    }
 }
