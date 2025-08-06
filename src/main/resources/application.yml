@@ -6,14 +6,14 @@ spring:
     name: fearless-draft
 
   datasource:
-    url: jdbc:mysql://localhost:3306/fearless?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
-    username: fearless
+    url: jdbc:mysql://localhost:3306/fearlessdraft?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
+    username: fearlessdraft
     password: qwer1234
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
     hibernate:
-      ddl-auto: update  # ?? ??? update / ?? ??? validate ?? none ??
+      ddl-auto: create
     show-sql: true
     properties:
       hibernate:
