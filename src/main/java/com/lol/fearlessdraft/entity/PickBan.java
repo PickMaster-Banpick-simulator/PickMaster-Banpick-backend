@@ -22,7 +22,7 @@ public class PickBan {
      private String championName;
 
      @Enumerated(EnumType.STRING)
-     private Type type;
+     private BanPickActionType type;
 
     @Column(nullable = false)
     private int turnOrder;

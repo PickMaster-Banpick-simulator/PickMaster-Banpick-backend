@@ -1,14 +1,17 @@
 package com.lol.fearlessdraft.dto.banpick;
 
-import com.lol.fearlessdraft.entity.Type;
+import com.lol.fearlessdraft.entity.BanPickActionType;
+import lombok.Builder;
+
 
 public record BanPickMessage(
 
 
         Long matchId,
         Long gameId,
-        Type actionType, // "BAN" or "PICK"
+        BanPickActionType actionType, // "BAN" or "PICK"
         String championName,
-        String teamName
+        String teamName,
+        int turnOrder
 ) {
 }

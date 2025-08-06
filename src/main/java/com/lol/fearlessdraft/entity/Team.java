@@ -24,7 +24,8 @@ public class Team {
 
    @Column(nullable = false)
    private String teamLogo;
-
+    @Column(nullable = false, length = 10)
+    private String teamCode;
     @OneToMany(mappedBy = "teamA")
     private List<Match> matchesAsTeamA = new ArrayList<>();
 

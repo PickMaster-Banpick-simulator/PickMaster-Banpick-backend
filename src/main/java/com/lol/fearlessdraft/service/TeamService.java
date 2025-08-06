@@ -36,7 +36,7 @@ public class TeamService {
 
   @Transactional
    public TeamResponseDto updateTeam(TeamRequestDto teamRequestDto) {
-      Team team = teamRepository.findByName(teamRequestDto.teamName()).orElseThrow(()->
+      Team team = teamRepository.findByTeamName(teamRequestDto.teamName()).orElseThrow(()->
           new IllegalArgumentException("Team not found"));
        team.updateTeam(teamRequestDto.teamName(), teamRequestDto.teamLogo());
 

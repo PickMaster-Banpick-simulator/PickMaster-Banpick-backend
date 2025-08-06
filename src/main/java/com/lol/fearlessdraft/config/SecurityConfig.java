@@ -23,10 +23,10 @@ public class SecurityConfig {
        http.csrf( csrf -> csrf.disable());
        http.cors(Customizer.withDefaults());
        http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS) );
-       http.authorizeHttpRequests( authorize -> authorize.anyRequest().authenticated() );
+
         http.authorizeHttpRequests( auth->{
             auth
-                    .requestMatchers("/**/").permitAll()
+                    .requestMatchers("/api/** ","/ws/*","/topic/**").permitAll()
                     .anyRequest().authenticated();
         });
 

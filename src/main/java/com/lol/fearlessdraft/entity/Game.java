@@ -3,6 +3,7 @@ package com.lol.fearlessdraft.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -11,6 +12,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Game {
 
 
@@ -45,7 +47,9 @@ public class Game {
   // 이번 게임 결과 (true: blue win, false: red win, null: 아직 안끝남)
   private Boolean blueTeamWin;
 
-
+  @ManyToOne
+  @JoinColumn(name = "winner_team_id")
+  private Team winner;
 
   public boolean isFinished() {
     return blueTeamWin != null;

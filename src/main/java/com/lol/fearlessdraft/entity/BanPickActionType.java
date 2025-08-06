@@ -1,5 +1,5 @@
 package com.lol.fearlessdraft.entity;
 
-public enum Type {
+public enum BanPickActionType {
     PICK,BAN
 }

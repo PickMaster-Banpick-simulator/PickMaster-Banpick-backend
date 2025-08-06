@@ -51,7 +51,19 @@ public class Match {
 
     @Column(name = "allow_spectators")
     private boolean allowSpectators;
+    @Column(name = "team_a_wins")
+    private int teamAWins;
 
+    @Column(name = "team_b_wins")
+    private int teamBWins;
+
+    public void recordGameResult(Team winner) {
+        if (winner.equals(teamA)) {
+            teamAWins++;
+        } else if (winner.equals(teamB)) {
+            teamBWins++;
+        }
+    }
 
     public boolean isMatchOver() {
         long teamAWins = games.stream().filter(g -> g.getWinner() != null && g.getWinner().equals(teamA)).count();

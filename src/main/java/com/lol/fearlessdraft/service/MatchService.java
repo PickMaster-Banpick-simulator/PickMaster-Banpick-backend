@@ -10,6 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -72,7 +73,40 @@ public class MatchService {
                 .build();
     }
 
+    @Transactional(readOnly = true)
+    public List<MatchResponseDto> getAllMatches() {
+        return matchRepository.findAll().stream()
+                .map(match -> MatchResponseDto.builder()
+                        .matchId(match.getId())
+                        .matchName(match.getMatchName())
+                        .teamAName(match.getTeamA().getTeamName())
+                        .teamBName(match.getTeamB().getTeamName())
+                        .numberOfGames(match.getNumberOfGames())
+                        .matchType(match.getMatchType())
+                        .allowSpectators(match.isAllowSpectators())
+                        .build())
+                .toList();
+    }
 
+    @Transactional(readOnly = true)
+    public MatchResponseDto getMatchById(Long matchId) {
+        Match match = matchRepository.findById(matchId)
+                .orElseThrow(() -> new IllegalArgumentException("Match not found"));
 
+        return MatchResponseDto.builder()
+                .matchId(match.getId())
+                .matchName(match.getMatchName())
+                .teamAName(match.getTeamA().getTeamName())
+                .teamBName(match.getTeamB().getTeamName())
+                .numberOfGames(match.getNumberOfGames())
+                .matchType(match.getMatchType())
+                .allowSpectators(match.isAllowSpectators())
+                .build();
+    }
+
+    @Transactional
+    public void deleteMatch(Long matchId) {
+        matchRepository.deleteById(matchId);
+    }
 
 }
