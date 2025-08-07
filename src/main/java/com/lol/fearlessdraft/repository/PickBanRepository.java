@@ -20,12 +20,13 @@ public interface PickBanRepository extends JpaRepository<PickBan, Long > {
 
     @Query("SELECT pb FROM PickBan pb " +
             "WHERE pb.game.match.id = :matchId AND pb.team.id = :teamId " +
-            "AND pb.game.gameOrder < :currentGameNumber AND pb.type = :type")
-    List<PickBan> findByMatchIdAndTeamIdAndGameNumberLessThanAndType(
+            "AND pb.game.gameOrder < :currentGameNumber AND pb.type IN :types")
+    List<PickBan> findByMatchIdAndTeamIdAndGameNumberLessThanAndTypeIn(
             @Param("matchId") Long matchId,
             @Param("teamId") Long teamId,
             @Param("currentGameNumber") Long currentGameNumber,
-            @Param("type") BanPickActionType type);
+            @Param("types") List<BanPickActionType> types);
+
 
     long countByGame(Game game);
 

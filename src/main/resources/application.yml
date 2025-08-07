@@ -28,7 +28,7 @@ spring:
     message-size-limit: 128000
     send-time-limit: 20s
 
-# ??
+
 logging:
   level:
     org.hibernate.SQL: debug
