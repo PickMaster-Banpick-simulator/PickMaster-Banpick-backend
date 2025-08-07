@@ -39,5 +39,8 @@ public class BanPickTurn {
     public void TurnOrder(int turnOrder) {
         this.turnOrder = turnOrder;
     }
+    @ManyToOne
+    @JoinColumn(name = "match_id")
+    private Match match;
 
 }

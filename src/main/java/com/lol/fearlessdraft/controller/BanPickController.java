@@ -33,7 +33,7 @@ public class BanPickController {
         this.messagingTemplate = messagingTemplate;
     }
 
-    @MessageMapping("/banpick/select/{gameId}")
+    @MessageMapping("select/{gameId}")
     public void handleBanPick(@DestinationVariable Long gameId, BanPickMessage message) {
         try {
             banPickService.processBanPickSelection(message);
