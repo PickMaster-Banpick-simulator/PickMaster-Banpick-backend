@@ -82,4 +82,5 @@ public class Match {
         else if (teamBWins > teamAWins) return teamB;
         else return null;
     }
+
 }

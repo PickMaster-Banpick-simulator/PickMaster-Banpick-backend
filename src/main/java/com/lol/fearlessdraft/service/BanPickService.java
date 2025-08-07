@@ -13,6 +13,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+
+
+
 @Service
 public class BanPickService {
 
@@ -49,17 +52,26 @@ public class BanPickService {
         Team team = teamRepository.findByTeamName(message.teamName())
                 .orElseThrow(() -> new IllegalArgumentException("팀을 찾을 수 없습니다. name=" + message.teamName()));
 
-        // ✅ Fearless Draft 룰 적용 (PICK일 경우만 체크)
-        if (message.actionType() ==  BanPickActionType.PICK) {
-            Long matchId = game.getMatch().getId();
-            Long currentGameNumber = game.getGameOrder();
-            Set<String> previousPicks = getPreviousPicks(matchId, currentGameNumber, team.getId());
+        Match match = game.getMatch();
+        Long matchId = match.getId();
+        Long currentGameNumber = game.getGameOrder();
+        Long teamId = team.getId();
+        Long opponentTeamId = getOpponentTeamId(match, team);
 
-            if (previousPicks.contains(message.championName())) {
-                throw new IllegalArgumentException("이 챔피언은 이전 게임에서 이미 픽하여 선택할 수 없습니다.");
+        // 하드피어리스 룰 적용: 이전 경기에서 팀과 상대팀의 PICK, BAN 챔피언 모두 중복 제한
+        Set<String> myTeamRestrictedChampions = getPreviousPicksAndBans(matchId, currentGameNumber, teamId);
+        Set<String> opponentTeamRestrictedChampions = getPreviousPicksAndBans(matchId, currentGameNumber, opponentTeamId);
+
+        if (message.actionType() == BanPickActionType.PICK || message.actionType() == BanPickActionType.BAN) {
+            if (myTeamRestrictedChampions.contains(message.championName())) {
+                throw new IllegalArgumentException("이 챔피언은 이전 게임에서 이미 픽 또는 밴하여 선택할 수 없습니다.");
+            }
+            if (opponentTeamRestrictedChampions.contains(message.championName())) {
+                throw new IllegalArgumentException("상대 팀이 이전 게임에서 픽 또는 밴한 챔피언은 선택할 수 없습니다.");
             }
         }
 
+        // 표준 밴픽 턴 검증
         List<BanPickTurn> turns = banPickTurnFactory.createStandardTurns();
 
         BanPickTurn expectedTurn = turns.stream()
@@ -117,13 +129,36 @@ public class BanPickService {
         return count >= banPickTurnFactory.createStandardTurns().size();
     }
 
-    public Set<String> getPreviousPicks(Long matchId, Long currentGameNumber, Long teamId) {
-        List<PickBan> previousPicks = pickBanRepository
-                .findByMatchIdAndTeamIdAndGameNumberLessThanAndType(
-                        matchId, teamId, currentGameNumber, BanPickActionType.PICK);
+    /**
+     * 이전 경기에서 해당 팀이 PICK 또는 BAN 한 챔피언 목록 반환
+     * @param matchId 현재 매치 ID
+     * @param currentGameNumber 현재 경기 순서
+     * @param teamId 팀 ID
+     * @return 제한 대상 챔피언 이름 집합
+     */
+    private Set<String> getPreviousPicksAndBans(Long matchId, Long currentGameNumber, Long teamId) {
+        List<PickBan> previousRecords = pickBanRepository.findByMatchIdAndTeamIdAndGameNumberLessThanAndTypeIn(
+                matchId,
+                teamId,
+                currentGameNumber,
+                List.of(BanPickActionType.PICK, BanPickActionType.BAN)
+        );
 
-        return previousPicks.stream()
+        return previousRecords.stream()
                 .map(PickBan::getChampionName)
                 .collect(Collectors.toSet());
+    }
+
+    /**
+     * 상대 팀 ID 조회 - Match 엔티티에 teamA, teamB가 있으므로 그걸 활용
+     */
+    private Long getOpponentTeamId(Match match, Team myTeam) {
+        if (match.getTeamA().getId().equals(myTeam.getId())) {
+            return match.getTeamB().getId();
+        } else if (match.getTeamB().getId().equals(myTeam.getId())) {
+            return match.getTeamA().getId();
+        } else {
+            throw new IllegalArgumentException("팀이 매치에 속해있지 않습니다.");
+        }
     }
 }
