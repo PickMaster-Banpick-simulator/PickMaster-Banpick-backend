@@ -129,13 +129,7 @@ public class BanPickService {
         return count >= banPickTurnFactory.createStandardTurns().size();
     }
 
-    /**
-     * 이전 경기에서 해당 팀이 PICK 또는 BAN 한 챔피언 목록 반환
-     * @param matchId 현재 매치 ID
-     * @param currentGameNumber 현재 경기 순서
-     * @param teamId 팀 ID
-     * @return 제한 대상 챔피언 이름 집합
-     */
+
     private Set<String> getPreviousPicksAndBans(Long matchId, Long currentGameNumber, Long teamId) {
         List<PickBan> previousRecords = pickBanRepository.findByMatchIdAndTeamIdAndGameNumberLessThanAndTypeIn(
                 matchId,
