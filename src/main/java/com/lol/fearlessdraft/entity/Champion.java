@@ -1,16 +1,13 @@
 package com.lol.fearlessdraft.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(name = "champion_tbl")
 @Getter
 @Builder
-@NoArgsConstructor
+@NoArgsConstructor(access =  AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Champion {
     @Id

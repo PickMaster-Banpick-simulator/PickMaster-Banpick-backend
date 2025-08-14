@@ -29,7 +29,6 @@ public class BanPickController {
 
         this.gameService = gameService;
         this.banPickService = banPickService;
-
         this.messagingTemplate = messagingTemplate;
     }
 
