@@ -19,11 +19,13 @@ public class MatchService {
     private final MatchRepository matchRepository;
     private final TeamRepository teamRepository;
     private final PasswordEncoder passwordEncoder;
+
     public MatchService(MatchRepository matchRepository, TeamRepository teamRepository, PasswordEncoder passwordEncoder) {
         this.matchRepository = matchRepository;
         this.teamRepository = teamRepository;
         this.passwordEncoder = passwordEncoder;
     }
+
     @Transactional
     public MatchResponseDto createMatch(MatchRequestDto matchRequestDto) {
         Team teamA = teamRepository.findById(matchRequestDto.teamAId())
@@ -33,20 +35,11 @@ public class MatchService {
 
         Optional<Match> existingMatch = matchRepository.findByTeamAAndTeamB(teamA, teamB);
         if (existingMatch.isPresent()) {
-            if (!passwordEncoder.matches(matchRequestDto.matchPassword(), existingMatch.get().getMatchPassword())) {
+            Match match = existingMatch.get();
+            if (!passwordEncoder.matches(matchRequestDto.matchPassword(), match.getMatchPassword())) {
                 throw new IllegalArgumentException("이미 동일한 매치가 존재하지만 비밀번호가 일치하지 않습니다.");
             }
-
-            Match match = existingMatch.get();
-            return MatchResponseDto.builder()
-                    .matchId(match.getId())
-                    .matchName(match.getMatchName())
-                    .teamAName(teamA.getTeamName())
-                    .teamBName(teamB.getTeamName())
-                    .numberOfGames(match.getNumberOfGames())
-                    .matchType(match.getMatchType())
-                    .allowSpectators(match.isAllowSpectators())
-                    .build();
+            return MatchResponseDto.from(match);
         }
 
         String encodedPassword = passwordEncoder.encode(matchRequestDto.matchPassword());
@@ -61,30 +54,13 @@ public class MatchService {
                 .build();
 
         Match savedMatch = matchRepository.save(match);
-
-        return MatchResponseDto.builder()
-                .matchId(savedMatch.getId())
-                .matchName(savedMatch.getMatchName())
-                .teamAName(teamA.getTeamName())
-                .teamBName(teamB.getTeamName())
-                .numberOfGames(savedMatch.getNumberOfGames())
-                .matchType(savedMatch.getMatchType())
-                .allowSpectators(savedMatch.isAllowSpectators())
-                .build();
+        return MatchResponseDto.from(savedMatch);
     }
 
     @Transactional(readOnly = true)
     public List<MatchResponseDto> getAllMatches() {
         return matchRepository.findAll().stream()
-                .map(match -> MatchResponseDto.builder()
-                        .matchId(match.getId())
-                        .matchName(match.getMatchName())
-                        .teamAName(match.getTeamA().getTeamName())
-                        .teamBName(match.getTeamB().getTeamName())
-                        .numberOfGames(match.getNumberOfGames())
-                        .matchType(match.getMatchType())
-                        .allowSpectators(match.isAllowSpectators())
-                        .build())
+                .map(MatchResponseDto::from)
                 .toList();
     }
 
@@ -92,21 +68,11 @@ public class MatchService {
     public MatchResponseDto getMatchById(Long matchId) {
         Match match = matchRepository.findById(matchId)
                 .orElseThrow(() -> new IllegalArgumentException("Match not found"));
-
-        return MatchResponseDto.builder()
-                .matchId(match.getId())
-                .matchName(match.getMatchName())
-                .teamAName(match.getTeamA().getTeamName())
-                .teamBName(match.getTeamB().getTeamName())
-                .numberOfGames(match.getNumberOfGames())
-                .matchType(match.getMatchType())
-                .allowSpectators(match.isAllowSpectators())
-                .build();
+        return MatchResponseDto.from(match);
     }
 
     @Transactional
     public void deleteMatch(Long matchId) {
         matchRepository.deleteById(matchId);
     }
-
 }

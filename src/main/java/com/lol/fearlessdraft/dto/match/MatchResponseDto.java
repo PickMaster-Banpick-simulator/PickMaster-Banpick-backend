@@ -1,9 +1,10 @@
 package com.lol.fearlessdraft.dto.match;
 
+import com.lol.fearlessdraft.entity.Match;
 import com.lol.fearlessdraft.entity.MatchType;
-import lombok.Builder;
 
-@Builder
+
+
 public record MatchResponseDto(
     Long matchId,
     String matchName,
@@ -14,4 +15,15 @@ public record MatchResponseDto(
     boolean allowSpectators
 
 ) {
+    public static MatchResponseDto from(Match match) {
+        return new MatchResponseDto(
+                match.getId(),
+                match.getMatchName(),
+                match.getNumberOfGames(),
+                match.getTeamA().getTeamName(),
+                match.getTeamB().getTeamName(),
+                match.getMatchType(),
+                match.isAllowSpectators()
+        );
+    }
 }
