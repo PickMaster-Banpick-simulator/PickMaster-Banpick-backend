@@ -3,16 +3,16 @@ package com.lol.fearlessdraft.controller;
 
 import com.lol.fearlessdraft.dto.banpick.BanPickMessage;
 import com.lol.fearlessdraft.dto.banpick.BanPickResponseDto;
-import com.lol.fearlessdraft.entity.BanPickActionType;
+
 import com.lol.fearlessdraft.service.BanPickService;
-import com.lol.fearlessdraft.service.GameService;
+
 
 
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.Payload;
+
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.stereotype.Controller;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,12 +22,11 @@ import java.util.List;
 @RequestMapping("/api/banpick")
 public class BanPickController {
 
-    private final GameService gameService;
+
     private final BanPickService banPickService;
     private final SimpMessagingTemplate messagingTemplate;
-    public BanPickController(GameService gameService, BanPickService banPickService, SimpMessagingTemplate messagingTemplate) {
+    public BanPickController( BanPickService banPickService, SimpMessagingTemplate messagingTemplate) {
 
-        this.gameService = gameService;
         this.banPickService = banPickService;
         this.messagingTemplate = messagingTemplate;
     }
