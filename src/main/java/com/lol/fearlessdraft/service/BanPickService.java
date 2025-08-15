@@ -114,18 +114,13 @@ public class BanPickService {
         }
     }
 
-    @Transactional(readOnly = true)
+        @Transactional(readOnly = true)
     public List<BanPickResponseDto> getBanPickHistoryByGame(Game game) {
         return pickBanRepository.findAllByGameOrderByTurnOrderAsc(game)
                 .stream()
-                .map(pick -> BanPickResponseDto.builder()
-                        .teamId(pick.getTeam().getId())
-                        .teamName(pick.getTeam().getTeamName())
-                        .championName(pick.getChampionName())
-                        .actionType(pick.getType())
-                        .turnOrder(pick.getTurnOrder())
-                        .build()
-                ).toList();
+                .map(BanPickResponseDto::of
+                )
+                .toList();
     }
 
     @Transactional(readOnly = true)
