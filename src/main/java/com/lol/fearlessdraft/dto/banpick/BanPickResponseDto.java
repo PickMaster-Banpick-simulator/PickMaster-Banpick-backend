@@ -3,7 +3,7 @@ package com.lol.fearlessdraft.dto.banpick;
 import com.lol.fearlessdraft.entity.BanPickActionType;
 
 import com.lol.fearlessdraft.entity.PickBan;
-import lombok.Builder;
+
 
 
 public record BanPickResponseDto(

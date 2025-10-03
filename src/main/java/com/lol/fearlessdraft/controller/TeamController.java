@@ -8,7 +8,9 @@ import com.lol.fearlessdraft.service.TeamService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -32,15 +34,21 @@ public class TeamController {
     }
 
     // 팀 생성
+
     @PostMapping
-    public ResponseEntity<CommonResDto> createTeam(@RequestBody TeamRequestDto request) {
-        TeamResponseDto response = teamService.createTeam(request);
+    public ResponseEntity<CommonResDto> createTeam(
+            @RequestParam String teamName,
+            @RequestParam String teamCode,
+            @RequestParam(required = false) MultipartFile teamLogo
+    ) throws IOException {
+        TeamResponseDto response = teamService.createTeam(teamName, teamCode, teamLogo);
         return ResponseEntity.ok(new CommonResDto(
                 HttpStatus.OK,
                 "팀 생성 성공",
                 response
         ));
     }
+
 
     // 팀 수정
     @PutMapping
