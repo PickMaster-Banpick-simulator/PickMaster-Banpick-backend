@@ -1,179 +1,171 @@
-# Fearless Draft API 명세서
+✦ 네, 알겠습니다. 지금까지 만든 API에 대한 명세서를 작성해 드리겠습니다.
 
-## 📌 Base URL
-```
-/api
-```
+이 명세서를 바탕으로 프론트엔드 개발을 진행하거나, API 테스트 도구(Postman 등)를 사용하여 백엔드가 잘 동작하는지 확인할 수 있습니다.
 
----
+  ---                                                                                                                                                                                                                                                               
 
-## ✅ Team API
+## Pick Master API 명세서
 
-### 🔹 전체 팀 조회
-- **URL**: `/teams`
-- **Method**: `GET`
-- **Response**:
-```json
-{
-  "status": "OK",
-  "message": "모든 팀 조회 성공",
-  "data": [ ... 팀 리스트 ... ]
-}
-```
 
-### 🔹 팀 생성
-- **URL**: `/teams`
-- **Method**: `POST`
-- **Request Body**:
-```json
-{
-  "name": "팀 이름",
-  "coach": "감독 이름"
-}
-```
-- **Response**:
-```json
-{
-  "status": "OK",
-  "message": "팀 생성 성공",
-  "data": { ... 생성된 팀 정보 ... }
-}
-```
+Base URL: http://localhost:8080
 
-### 🔹 팀 수정
-- **URL**: `/teams`
-- **Method**: `PUT`
-- **Request Body**:
-```json
-{
-  "id": 1,
-  "name": "변경된 팀 이름",
-  "coach": "변경된 감독 이름"
-}
-```
-- **Response**:
-```json
-{
-  "status": "OK",
-  "message": "팀 수정 성공",
-  "data": { ... 수정된 팀 정보 ... }
-}
-```
+### 1. Room API
 
-### 🔹 팀 삭제
-- **URL**: `/teams/{teamId}`
-- **Method**: `DELETE`
-- **Response**:
-```json
-{
-  "status": "OK",
-  "message": "팀 삭제 성공",
-  "data": null
-}
-```
+방 생성, 조회, 입장을 관리합니다.
 
----
+#### 1.1 방 생성
 
-## ✅ Match API
 
-### 🔹 매치 생성
-- **URL**: `/matches/create`
-- **Method**: `POST`
-- **Request Body**:
-```json
-{
-  "matchName": "매치 이름",
-  "matchPassword": "1234",
-  "teamAId": 1,
-  "teamBId": 2,
-  "numberOfGames": 3,
-  "banRule": "STANDARD",
-  "matchType": "BO3",
-  "allowSpectators": true
-}
-```
-- **Response**:
-```json
-{
-  ... 생성된 매치 정보 ...
-}
-```
+- Endpoint: POST /api/rooms                                                                                                                                                                                                                                      
+  `json                                                                                                                                                                                                                                                             
+      {                                                                                                                                                                                                                                                             
+        "statusCode": 201,                                                                                                                                                                                                                                          
+        "message": "방 생성 성공",                                                                                                                                                                                                                                  
+        "data": {                                                                                                                                                                                                                                                   
+          "id": 1,                                                                                                                                                                                                                                                  
+          "name": "새로운 방 이름",                                                                                                                                                                                                                                 
+          "hasPassword": true                                                                                                                                                                                                                                       
+        }                                                                                                                                                                                                                                                           
+      }                                                                                                                                                                                                                                                             
+      `
 
-### 🔹 매치 단건 조회
-- **URL**: `/matches/{matchId}`
-- **Method**: `GET`
 
-### 🔹 매치 전체 조회
-- **URL**: `/matches`
-- **Method**: `GET`
+1.2 전체 방 목록 조회
+`json                                                                                                                                                                                                                                                             
+    {                                                                                                                                                                                                                                                             
+      "statusCode": 200,                                                                                                                                                                                                                                          
+      "message": "전체 방 목록 조회 성공",                                                                                                                                                                                                                        
+      "data": [                                                                                                                                                                                                                                                   
+        {                                                                                                                                                                                                                                                         
+          "id": 1,                                                                                                                                                                                                                                                
+          "name": "새로운 방 이름",                                                                                                                                                                                                                               
+          "hasPassword": true                                                                                                                                                                                                                                     
+        },                                                                                                                                                                                                                                                        
+        {                                                                                                                                                                                                                                                         
+          "id": 2,                                                                                                                                                                                                                                                
+          "name": "비번 없는 방",                                                                                                                                                                                                                                 
+          "hasPassword": false                                                                                                                                                                                                                                    
+        }                                                                                                                                                                                                                                                         
+      ]                                                                                                                                                                                                                                                           
+    }                                                                                                                                                                                                                                                             
+    `
 
-### 🔹 매치 삭제
-- **URL**: `/matches/{matchId}`
-- **Method**: `DELETE`
+#### 1.3 방 입장 (비밀번호 확인)
 
----
 
-## ✅ Game API
+- Endpoint: POST /api/rooms/{roomId}/enter                                                                                                                                                                                                                       
+  `json                                                                                                                                                                                                                                                             
+      {                                                                                                                                                                                                                                                             
+        "password": "사용자가 입력한 비밀번호"                                                                                                                                                                                                                      
+      }                                                                                                                                                                                                                                                             
+      `
+-   Success Response (200 OK):
 
-### 🔹 게임 시작
-- **URL**: `/games/start`
-- **Method**: `POST`
-- **Request Body**:
-```json
-{
-  "matchId": 1,
-  "gameOrder": 1
-}
-```
-- **Response**:
-```json
-{
-  "status": "OK",
-  "message": "게임이 성공적으로 시작되었습니다.",
-  "data": { ... 게임 정보 ... }
-}
-```
+`json                                                                                                                                                                                                                                                             
+    {                                                                                                                                                                                                                                                             
+      "statusCode": 200,                                                                                                                                                                                                                                          
+      "message": "방 입장 성공",                                                                                                                                                                                                                                  
+      "data": true                                                                                                                                                                                                                                                
+    }                                                                                                                                                                                                                                                             
+    `
+-   Error Response (401 UNAUTHORIZED):                                                                                                                                                                                                                            
+    `json                                                                                                                                                                                                                                                         
+    {                                                                                                                                                                                                                                                             
+      "statusCode": 401,                                                                                                                                                                                                                                          
+      "message": "비밀번호가 틀렸습니다.",                                                                                                                                                                                                                        
+      "data": false                                                                                                                                                                                                                                               
+    }                                                                                                                                                                                                                                                             
+    `
 
-### 🔹 게임 결과 등록
-- **URL**: `/games/result`
-- **Method**: `POST`
-- **Request Body**:
-```json
-{
-  "gameId": 1,
-  "winnerTeamId": 2
-}
-```
-- **Response**:
-```json
-{
-  "status": "OK",
-  "message": "게임 결과가 정상적으로 기록되었습니다.",
-  "data": null
-}
-```
+  ---                                                                                                                                                                                                                                                               
 
----
 
-## ✅ BanPick WebSocket API
+2. Match API
+- Endpoint: POST /api/matches                                                                                                                                                                                                                                    
+  `json                                                                                                                                                                                                                                                             
+      {                                                                                                                                                                                                                                                             
+        "roomId": 1,                                                                                                                                                                                                                                                
+        "matchType": "BO3", // "BO1", "BO3", "BO5" 중 하나                                                                                                                                                                                                          
+        "blueTeamName": "블루팀",                                                                                                                                                                                                                                   
+        "redTeamName": "레드팀"                                                                                                                                                                                                                                     
+      }                                                                                                                                                                                                                                                             
+      `
+-   Success Response (201 CREATED):
 
-### 🔹 밴픽 선택
-- **URL**: `/app/select/{gameId}` (STOMP 메시지)
-- **Method**: WebSocket Message
-- **Payload**:
-```json
-{
-  "teamId": 1,
-  "championId": 101,
-  "actionType": "BAN"
-}
-```
+`json                                                                                                                                                                                                                                                             
+    {                                                                                                                                                                                                                                                             
+      "statusCode": 201,                                                                                                                                                                                                                                          
+      "message": "매치가 성공적으로 생성되었습니다.",                                                                                                                                                                                                             
+      "data": {                                                                                                                                                                                                                                                   
+        "matchId": 1,                                                                                                                                                                                                                                             
+        "roomId": 1,                                                                                                                                                                                                                                              
+        "matchType": "BO3",                                                                                                                                                                                                                                       
+        "blueTeamName": "블루팀",                                                                                                                                                                                                                                 
+        "redTeamName": "레드팀"                                                                                                                                                                                                                                   
+      }                                                                                                                                                                                                                                                           
+    }                                                                                                                                                                                                                                                             
+    `
 
-### 🔹 밴픽 진행 상황 구독
-- **URL**: `/topic/banpick/progress/{gameId}`
 
-### 🔹 밴픽 완료 구독
-- **URL**: `/topic/banpick/complete/{gameId}`
+2.2 현재 매치 상태 조회
+- Endpoint: GET /api/matches/room/{roomId}                                                                                                                                                                                                                       
+  `json                                                                                                                                                                                                                                                             
+      {                                                                                                                                                                                                                                                             
+        "statusCode": 200,                                                                                                                                                                                                                                          
+        "message": "매치 상태 조회 성공",                                                                                                                                                                                                                           
+        "data": {                                                                                                                                                                                                                                                   
+          "matchId": 1,                                                                                                                                                                                                                                             
+          "matchType": "BO3",                                                                                                                                                                                                                                       
+          "blueTeamName": "블루팀",                                                                                                                                                                                                                                 
+          "redTeamName": "레드팀",                                                                                                                                                                                                                                  
+          "blueWins": 0,                                                                                                                                                                                                                                            
+          "redWins": 1,                                                                                                                                                                                                                                             
+          "currentGameNumber": 2,                                                                                                                                                                                                                                   
+          "banPick": {                                                                                                                                                                                                                                              
+            "turnIndex": 0,                                                                                                                                                                                                                                         
+            "blueBans": [null, null, null, null, null],                                                                                                                                                                                                             
+            "redBans": [null, null, null, null, null],                                                                                                                                                                                                              
+            "bluePicks": [null, null, null, null, null],                                                                                                                                                                                                            
+            "redPicks": [null, null, null, null, null],                                                                                                                                                                                                             
+            "winner": null                                                                                                                                                                                                                                          
+          }                                                                                                                                                                                                                                                         
+        }                                                                                                                                                                                                                                                           
+      }                                                                                                                                                                                                                                                             
+      `
 
-### 🔹 에러 메시지 구독
-- **URL**: `/topic/banpick/error/{gameId}`
+  ---                                                                                                                                                                                                                                                               
+
+### 3. Ban/Pick WebSocket API
+
+실시간 밴픽 데이터 교환을 위한 웹소켓 명세입니다.
+
+-   WebSocket Endpoint: /ws (최초 연결 주소)
+
+#### 3.1 구독 (Subscribe)
+
+
+- Topic: /topic/banpick/{roomId}
+- Destination: /app/banpick/{roomId}
+  `json
+      {
+        "type": "메시지 타입", // "BANPICK_UPDATE", "GAME_FINISH_UPDATE"
+        "payload": { ... }
+      }
+      `
+
+-   `BANPICK_UPDATE` 발행 Payload:
+    -   클라이언트가 챔피언을 선택(밴 또는 픽)했을 때 서버로 전송합니다.
+
+`json
+    // 클라이언트가 턴에 맞게 챔피언 하나를 추가한 상태
+    {
+      "turnIndex": 1, // 다음 턴 인덱스
+      "blueBans": [{ "id": "Aatrox", "name": "아트록스", ... }, null, ...],
+      "redBans": [...],
+      "bluePicks": [...],
+      "redPicks": [...]
+    }
+    `
+
+
+- `GAME_FINISH_UPDATE` 발행 Payload:
