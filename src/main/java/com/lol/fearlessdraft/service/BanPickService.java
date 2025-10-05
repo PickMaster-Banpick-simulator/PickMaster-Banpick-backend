@@ -8,7 +8,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 
-\package com.pickmaster.service;
+
 
 
 import java.util.ArrayList;
@@ -61,7 +61,7 @@ public class BanPickService {
         String key = KEY_PREFIX + roomId;
         BanPickState state = (BanPickState) redisTemplate.opsForValue().get(key);
         if (state == null) {
-            state = BanPickState.;
+            state = BanPickState.createInitialState();
             redisTemplate.opsForValue().set(key, state, 2, TimeUnit.HOURS);
         }
         return state;
