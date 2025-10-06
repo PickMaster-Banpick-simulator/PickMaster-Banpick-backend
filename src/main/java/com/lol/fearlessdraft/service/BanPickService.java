@@ -73,4 +73,9 @@ public class BanPickService {
             list.set(index, element);
         }
     }
+
+    public void deleteBanPickState(String roomId) {
+        String key = KEY_PREFIX + roomId;
+        redisTemplate.delete(key);
+    }
 }

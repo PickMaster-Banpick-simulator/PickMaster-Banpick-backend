@@ -1,7 +1,6 @@
 package com.lol.fearlessdraft.dto.room;
 
 import com.lol.fearlessdraft.entity.Room;
-import com.lol.fearlessdraft.repository.RoomRepository;
 
 public record RoomResponse(
         String id ,
