@@ -29,5 +29,5 @@ public class WebSocketEventListener {
                 gameController.broadcastRoomState(roomId, room); // GameController의 메서드 재사용
             });
         }
-
+    }
 }
