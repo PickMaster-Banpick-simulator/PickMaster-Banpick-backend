@@ -1,26 +1,31 @@
 package com.lol.fearlessdraft.entity;
 
+import lombok.Data;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
-import java.util.stream.Stream;
+@Data
+public class BanPickState implements Serializable {
 
-public record BanPickState(
-    int turnIndex,
-    List<Champion> blueBans,
-    List<Champion> redBans,
-    List<Champion> bluePicks,
-    List<Champion> redPicks) implements Serializable {
+    private int turnIndex = 0;
+    private String currentTurn; // "blue:ban", "red:pick" ...
+    private List<Champion> blueBans = new ArrayList<>();
+    private List<Champion> redBans = new ArrayList<>();
+    private List<Champion> bluePicks = new ArrayList<>();
+    private List<Champion> redPicks = new ArrayList<>();
+    private boolean isBanPickFinished = false;
 
-    // 초기 상태를 생성하는 정적 팩토리 메서드
-    public static BanPickState createInitialState() {
-        return new BanPickState(
-            0,
-            Stream.generate(() -> (Champion) null).limit(5).toList(),
-            Stream.generate(() -> (Champion) null).limit(5).toList(),
-            Stream.generate(() -> (Champion) null).limit(5).toList(),
-            Stream.generate(() -> (Champion) null).limit(5).toList()
-        );
+    public void updateTurnIndex(int turnIndex) {
+        this.turnIndex = turnIndex;
+    }
+
+    public void updateCurrentTurn(String currentTurn) {
+        this.currentTurn = currentTurn;
+    }
+
+    public void finishBanPick() {
+        this.isBanPickFinished = true;
     }
 }

@@ -11,6 +11,7 @@ public class CoreConfig implements WebMvcConfigurer {
         registry.addMapping("/api/**") // /api/로 시작하는 모든 경로
                 .allowedOrigins("http://localhost:5173") // React 개발 서버 주소
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                .allowedHeaders("*")
                 .allowCredentials(true);
     }
 }

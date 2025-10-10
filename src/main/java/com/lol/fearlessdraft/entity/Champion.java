@@ -1,6 +1,18 @@
 package com.lol.fearlessdraft.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.io.Serializable;
 
-// Redis 직렬화를 위해 Serializable을 구현한 레코드
-public record Champion(String id, String name, String image) implements Serializable {}
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Champion implements Serializable {
+
+    private String id;
+    private String name;
+    private String image;
+}

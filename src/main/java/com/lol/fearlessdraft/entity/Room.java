@@ -1,31 +1,49 @@
 package com.lol.fearlessdraft.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+
+import lombok.*;
+
+import java.io.Serializable;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 
-@Entity
-@Getter
+@Data
+@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Room {
+public class Room  implements Serializable {
 
-    @Id
-    @Column(length = 32)
+
+
     private String id;
 
-    @Column(nullable = false)
     private String name;
+
+    private Map<String, Player> blueTeamPlayers = new ConcurrentHashMap<>();
+    private Map<String, Player> redTeamPlayers = new ConcurrentHashMap<>();
 
     private Room( String id , String name ) {
         this.id = id;
         this.name = name;
     }
+    private BanPickState banPickState = new BanPickState();
+    public static Room create( String name) {
+        Room room = new Room();
 
-    public static Room of(String id, String name) {
-        return new Room(id, name);
+        room.id = UUID.randomUUID().toString();
+        room.name = name;
+
+
+        return room;
+    }
+
+    public boolean areAllPlayersReady() {
+        if (blueTeamPlayers.isEmpty() || redTeamPlayers.isEmpty()) {
+            return false;
+        }
+        boolean blueReady = blueTeamPlayers.values().stream().allMatch(Player::isReady);
+        boolean redReady = redTeamPlayers.values().stream().allMatch(Player::isReady);
+        return blueReady && redReady;
     }
 }
